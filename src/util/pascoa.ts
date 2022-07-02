@@ -1,9 +1,6 @@
-type Pascoa = {
-  mes: number,
-  dia: number
-}
+import { Pascoa } from "./interfaces";
 
-export default function pascoa(): Pascoa{
+export default function pascoaData(): Pascoa{
   const ano  = new Date().getUTCFullYear();
   const a  = ano % 19;
   const b = Math.trunc(ano / 100);
