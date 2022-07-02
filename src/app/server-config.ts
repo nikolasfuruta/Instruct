@@ -1,7 +1,7 @@
 import express, {Express} from 'express';
 import router from '../routes/feriado-routes';
 
-export default class App {
+class App {
   init: Express
   constructor(){
     this.init = express();
@@ -14,6 +14,8 @@ export default class App {
   }
 
   routes(){
-    this.init.use(router)
+    this.init.use(router);
   };
 }
+
+export const app = new App().init
