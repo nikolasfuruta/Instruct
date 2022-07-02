@@ -6,4 +6,9 @@ export default class FeriadoController {
     const result = FeriadoService.teste()
     res.status(200).send(result)
   } 
+
+  public static consultar(req: Request, res:Response): void {
+    const result = FeriadoService.teste()
+    res.status(200).send(result)
+  } 
 }
