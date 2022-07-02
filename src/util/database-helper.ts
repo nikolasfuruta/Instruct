@@ -1,47 +1,39 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import {PrismaClient} from "@prisma/client";
 
+type Data = {
+  nomeFeriado:string,
+  dataFeriado:Date,
+  tipoMovel: boolean
+}
+
 export default function insert(){
-  const data = [
-    {cod:12, sigla:"AC"},
-    {cod:27, sigla:"AL"},
-    {cod:16, sigla:"AP"},
-    {cod:13, sigla:"AM"},
-    {cod:29, sigla:"BA"},
-    {cod:23, sigla:"CE"},
-    {cod:53, sigla:"DF"},
-    {cod:32, sigla:"ES"},
-    {cod:52, sigla:"GO"},  
-    {cod:21, sigla:"MA"},
-    {cod:51, sigla:"MT"},  
-    {cod:50, sigla:"MS"},
-    {cod:31, sigla:"MG"},
-    {cod:15, sigla:"PA"},
-    {cod:25, sigla:"PB"},
-    {cod:41, sigla:"PR"},
-    {cod:26, sigla:"PE"},
-    {cod:22, sigla:"PI"},
-    {cod:33, sigla:"RJ"},
-    {cod:24, sigla:"RN"},
-    {cod:43, sigla:"RS"},
-    {cod:11, sigla:"RO"},
-    {cod:14, sigla:"RR"},
-    {cod:42, sigla:"SC"},
-    {cod:35, sigla:"SP"},
-    {cod:28, sigla:"TO"}
+  const data: Data[] = [
+    {nomeFeriado:"Ano Novo", dataFeriado: new Date("2022-01-01"), tipoMovel: false},
+    {nomeFeriado:"Tiradentes", dataFeriado: new Date("2022-04-21"), tipoMovel: false},
+    {nomeFeriado:"Dia do Trabalhador", dataFeriado: new Date("2022-05-01"), tipoMovel: false},
+    {nomeFeriado:"Independência", dataFeriado: new Date("2022-09-07"), tipoMovel: false},
+    {nomeFeriado:"Nossa Senhora Aparecida", dataFeriado: new Date("2022-10-12"), tipoMovel: false},
+    {nomeFeriado:"Finados", dataFeriado: new Date("2022-11-02"), tipoMovel: false},
+    {nomeFeriado:"Proclamação da República", dataFeriado: new Date("2022-11-15"), tipoMovel: false},
+    {nomeFeriado:"Natal", dataFeriado: new Date("2022-12-25"), tipoMovel: false},
   ];
 
   const prisma = new PrismaClient();
   data.forEach(async data  => {
     try {
-      await prisma.estados.create({
+      await prisma.feriadoNacional.create({
         data: {
-          nomeEstado:data.sigla,
-          codEstado: data.cod
+          nomeFeriado: data.nomeFeriado,
+          dataFeriado: data.dataFeriado,
+          tipoMovel: data.tipoMovel
         }
       })
     } catch(e) {
       console.error(e)
+    }
+    finally {
+      console.log("CONCLUÍDO")
     }
   });
 };
