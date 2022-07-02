@@ -9,56 +9,30 @@ datasource db {
 
 model FeriadoNacional {
   id          Int      @id @default(autoincrement())
-  dataFeriado DateTime @unique @db.Date
-  nomeFeriado String   @unique @db.Text
+  nomeFeriado String   @db.Text
+  dataFeriado DateTime @db.Date
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  tipoMovel   Boolean  @db.Boolean
 }
 
 model FeriadoEstadual {
-  id           Int      @id @default(autoincrement())
-  dataFeriado  DateTime @db.Date
-  nomeFeriado  String   @db.Text
-  codEstado    Int      @db.Integer
-  relCodEstado Estados  @relation(fields: [codEstado], references: [codEstado])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
+  id          Int      @id @default(autoincrement())
+  nomeFeriado String   @db.Text
+  dataFeriado DateTime @db.Date
+  codEstado   Int      @db.Integer
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tipoMovel   Boolean  @db.Boolean
 }
 
 model FeriadoMunicipal {
-  id              Int        @id @default(autoincrement())
-  dataFeriado     DateTime   @db.Date
-  nomeFeriado     String     @db.Text
-  codMunicipio    Int        @db.Integer
-  relCodMunicipio Municipios @relation(fields: [codMunicipio], references: [codMunicipio])
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-}
-
-model Movel {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  dataFeriado DateTime @db.Date
-  nomeFeriado String   @db.Text
-  estado      Int      @db.Integer
-  municipio   Int      @db.Integer
-}
-
-model Estados {
-  id         Int               @id @default(autoincrement())
-  nomeEstado String            @unique
-  codEstado  Int               @unique
-  municipios Municipios[]
-  feriados   FeriadoEstadual[]
-}
-
-model Municipios {
-  id            Int                @id @default(autoincrement())
-  nomeMunicipio String             @unique
-  codMunicipio  Int                @unique
-  codEstado     Int
-  relCodEstado  Estados            @relation(fields: [codEstado], references: [codEstado])
-  feriados      FeriadoMunicipal[]
+  id           Int      @id @default(autoincrement())
+  nomeFeriado  String   @db.Text
+  dataFeriado  DateTime @db.Date
+  codEstado    Int      @db.Integer
+  codMunicipio Int      @db.Integer
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  tipoMovel    Boolean  @db.Boolean
 }
