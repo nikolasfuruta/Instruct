@@ -1,5 +1,8 @@
+import prisma from "../database/prisma";
+
+
 export default class FeriadoService {
-  public static teste(): string{
-    return "OK"
+  public static async teste(){
+    return await prisma.feriadoNacional.findMany()
   }
 }
