@@ -10,7 +10,7 @@ datasource db {
 model FeriadoNacional {
   id          Int      @id @default(autoincrement())
   nomeFeriado String   @db.Text
-  dataFeriado DateTime @db.Date
+  dataFeriado String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   tipoMovel   Boolean  @db.Boolean
@@ -19,7 +19,7 @@ model FeriadoNacional {
 model FeriadoEstadual {
   id          Int      @id @default(autoincrement())
   nomeFeriado String   @db.Text
-  dataFeriado DateTime @db.Date
+  dataFeriado String   
   codEstado   Int      @db.Integer
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -29,7 +29,7 @@ model FeriadoEstadual {
 model FeriadoMunicipal {
   id           Int      @id @default(autoincrement())
   nomeFeriado  String   @db.Text
-  dataFeriado  DateTime @db.Date
+  dataFeriado  String 
   codEstado    Int      @db.Integer
   codMunicipio Int      @db.Integer
   createdAt    DateTime @default(now())
