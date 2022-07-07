@@ -17,19 +17,18 @@ export default class FeriadoController {
   } 
 
   public static async consultar(req: Request, res:Response): Promise<void> {
+    const { estado, municipio, data }: {estado:string, municipio?: string, data: string} = req.body;
     try{
-      const { estado, municipio, data }: {estado:string, municipio?: string, data: string} = req.body;
-      const cod: string = obterCod(estado,municipio).toString();
-
-      isValidCode(cod)
+      const cod = await obterCod(estado,municipio)
+      const strCode = isValidCode(cod)
       isValidDate(data)
-      
-      const result = FeriadoService.consultar(cod, data);
+
+      const result = await FeriadoService.consultar(strCode, data);
       res.status(200).send(result)
     }
     catch(e) {
       console.error(e);
-      res.status(400).send("An error occured");
+      res.status(404).send("An error occured");
     }
   } 
 }
