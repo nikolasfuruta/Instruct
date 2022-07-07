@@ -11,8 +11,6 @@ model FeriadoNacional {
   id          Int      @id @default(autoincrement())
   nomeFeriado String   @db.Text
   dataFeriado String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
   tipoMovel   Boolean  @db.Boolean
 }
 
@@ -21,8 +19,6 @@ model FeriadoEstadual {
   nomeFeriado String   @db.Text
   dataFeriado String   
   codEstado   Int      @db.Integer
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
   tipoMovel   Boolean  @db.Boolean
 }
 
@@ -32,7 +28,5 @@ model FeriadoMunicipal {
   dataFeriado  String 
   codEstado    Int      @db.Integer
   codMunicipio Int      @db.Integer
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
   tipoMovel    Boolean  @db.Boolean
 }
