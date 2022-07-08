@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import FeriadoService from "../service/FeriadoService";
 import obterCod from "../util/axios/ObterCod";
 import isValidCode from "../util/validation/codValidation";
+import validateDate from "validate-date";
 
 export default class FeriadoController {
   public static async teste(req: Request, res:Response): Promise<void >{
@@ -21,6 +22,7 @@ export default class FeriadoController {
     try{
       const cod: string | undefined = await obterCod(estado,municipio)
       const strCode: string = isValidCode(cod)
+      validateDate(data)
 
       const result = await FeriadoService.consultar(strCode, data);
       res.status(200).send(result)
