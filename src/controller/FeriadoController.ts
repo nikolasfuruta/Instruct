@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import FeriadoService from "../service/FeriadoService";
-import obterCod from "../util/axios/ObterCod";
-import isValidCode from "../util/validation/codValidation";
-import isValidEstado from "../util/validation/estadoValidation";
-import isValidDate from "../util/validation/dateValidation";
 import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
+import validateAll from '../util/validateAll'
 
 export default class FeriadoController {
   public static async teste(req: Request, res:Response): Promise<void >{
@@ -22,12 +19,8 @@ export default class FeriadoController {
     const {estado, municipio, date}: {estado: string, municipio: string|undefined, date: string} = req.body;
 
     try{
-      isValidEstado(estado);
-      isValidDate(date);
-      const cod: string | undefined = await obterCod(estado,municipio);
-      const strCode: string = isValidCode(cod);
-
-      const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.consultar(strCode, date);
+      const validCod = await validateAll(estado, municipio, date)
+      const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.consultar(validCod , date);
       res.status(200).send(result)
     }
     catch(e) {
@@ -39,12 +32,8 @@ export default class FeriadoController {
   public static async cadastrar(req: Request, res:Response): Promise<void>{
     const {estado, municipio, feriado, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body
     try{
-      isValidEstado(estado);
-      isValidDate(date);
-      const cod: string | undefined = await obterCod(estado,municipio);
-      const strCode: string = isValidCode(cod);
-
-      const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.cadastrar(strCode, estado, municipio, feriado, date);
+      const validCod = await validateAll(estado, municipio, date)
+      const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.cadastrar(validCod, estado, municipio, feriado, date);
       res.status(200).send(result)
     } catch(e){
       console.error(e);

@@ -1,6 +1,6 @@
 import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
 import prisma from "../database/prisma";
-import verificar from "../util/virificarCadastro";
+import isThereAnyRegistry from "../util/verifyRestry";
 
 export default class FeriadoService {
   public static async teste(){
@@ -32,12 +32,11 @@ export default class FeriadoService {
   }
 
   public static async cadastrar(cod: string, estado: string, municipio: string|undefined, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal>  {
-    const verify = await verificar(cod, date);
-    if(verify !== false){
-      const id: number = verify;
+    const registry = await isThereAnyRegistry(cod, date);
+    if(registry!== false){
+      const id: number = registry;
       return await this.alterar(cod, feriado, id);
     }
-    
     let result;
     if(cod.length === 2) {
       result = await prisma.feriadoEstadual.create({

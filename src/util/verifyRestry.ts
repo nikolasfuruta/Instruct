@@ -1,7 +1,7 @@
 import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
 import prisma from "../database/prisma";
 
-export default async function verificar(cod: string, date: string){
+export default async function isThereAnyRegistry(cod: string, date: string){
     let verify: FeriadoEstadual | FeriadoMunicipal | null;
     if(cod.length === 2) {
       verify = await prisma.feriadoEstadual.findFirst({
