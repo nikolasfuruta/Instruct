@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "axios": "ts-node-dev --respawn --transpile-only ./src/util/axios/ObterCod.ts"
+    "date": "ts-node-dev --respawn --transpile-only ./src/util/validation/dateValidation.ts"
   },
   "keywords": [],
   "author": "",

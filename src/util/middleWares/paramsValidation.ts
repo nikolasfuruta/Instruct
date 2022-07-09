@@ -1,7 +1,7 @@
 import { Request,Response } from 'express'
 
 
-export default function isValidParam(req: Request, res: Response, next: () => void){
+export default function middParam(req: Request, res: Response, next: () => void){
   let estado: string = req.params.estado;
   let municipio: string|undefined = req.params.municipio;
 

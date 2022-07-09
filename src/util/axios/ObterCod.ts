@@ -24,5 +24,3 @@ export async function gerarCod(url: string): Promise<string | undefined> {
   catch(e) { console.error(e) }
   finally { console.log("concluído") }
 }
-
-//obterCod("SP")

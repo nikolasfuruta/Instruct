@@ -1,7 +1,9 @@
-import validateDate from "validate-date";
+import validateDate from 'validate-date'
 
-export default function isValidDate(data: string): void {
-  if(!validateDate(data, "boolean")) {
+export default function isValidDate(date:string) {
+  if(!validateDate(date, 'boolean')){
     throw new Error("Invalid date")
   }
 }
+
+//isValidDate('12/02/2020')
