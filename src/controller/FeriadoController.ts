@@ -18,7 +18,7 @@ export default class FeriadoController {
   } 
 
   public static async consultar(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, date} = req.params;
+    const {estado, municipio, date}: {estado: string, municipio: string|undefined, date: string} = req.body;
 
     try{
       isValidEstado(estado)
