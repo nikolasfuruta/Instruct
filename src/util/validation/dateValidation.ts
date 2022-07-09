@@ -1,9 +1,9 @@
 import validateDate from 'validate-date'
 
 export default function isValidDate(date:string) {
-  if(!validateDate(date, 'boolean')){
-    throw new Error("Invalid date")
+  if(!validateDate(date, 'boolean',"yyyy-mm-dd")){
+    //throw new Error("Invalid date")
   }
 }
 
-//isValidDate('12/02/2020')
+//isValidDate('2020-11-20')

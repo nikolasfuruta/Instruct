@@ -3,6 +3,7 @@ import FeriadoService from "../service/FeriadoService";
 import obterCod from "../util/axios/ObterCod";
 import isValidCode from "../util/validation/codValidation";
 import isValidEstado from "../util/validation/estadoValidation";
+import isValidDate from "../util/validation/dateValidation";
 
 export default class FeriadoController {
   public static async teste(req: Request, res:Response): Promise<void >{
@@ -21,7 +22,7 @@ export default class FeriadoController {
 
     try{
       isValidEstado(estado)
-      
+      isValidDate(date)
       const cod: string | undefined = await obterCod(estado,municipio)
       const strCode: string = isValidCode(cod)
 
