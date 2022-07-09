@@ -7,9 +7,12 @@ const router = Router();
 router.route("/feriados").get(FeriadoController.teste);
 
 router.route("/feriados/consultar")
-  .post(middParam, FeriadoController.consultar)
+  .post(middParam, FeriadoController.consultar);
 
   router.route("/feriados/cadastrar")
-  .post(middParam, FeriadoController.cadastrar)
+  .post(middParam, FeriadoController.cadastrar);
+
+  router.route("/feriados/deletar")
+  .post(middParam, FeriadoController.deletar);
 
 export default router;

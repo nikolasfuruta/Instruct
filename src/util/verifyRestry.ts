@@ -2,9 +2,9 @@ import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
 import prisma from "../database/prisma";
 
 export default async function isThereAnyRegistry(cod: string, date: string){
-    let verify: FeriadoEstadual | FeriadoMunicipal | null;
+    let registry: FeriadoEstadual | FeriadoMunicipal | null;
     if(cod.length === 2) {
-      verify = await prisma.feriadoEstadual.findFirst({
+      registry = await prisma.feriadoEstadual.findFirst({
         where: { 
           cod: Number(cod),
           dataFeriado: date
@@ -12,12 +12,12 @@ export default async function isThereAnyRegistry(cod: string, date: string){
       });
     }
     else {
-      verify = await prisma.feriadoMunicipal.findFirst({
+      registry = await prisma.feriadoMunicipal.findFirst({
         where: { 
           cod: Number(cod),
           dataFeriado: date
         }
       });
     }
-    return verify ? Number(verify.id) : false;
+    return registry? Number(registry.id) : false;
 }
