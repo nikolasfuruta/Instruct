@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import FeriadoService from "../service/FeriadoService";
-import obterCod from "../util/axios/ObterCod";
-import isValidCode from "../util/validation/codValidation";
-import isValidEstado from "../util/validation/estadoValidation";
-import isValidDate from "../util/validation/dateValidation";
+import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
+import validateAll from '../util/validateAll'
 
 export default class FeriadoController {
   public static async teste(req: Request, res:Response): Promise<void >{
@@ -13,25 +11,56 @@ export default class FeriadoController {
     }
     catch(e) {
       console.error(e);
-      res.status(500).send("Error to connect with database");
+      res.status(500).send("An error occured");
     }
-  } 
+  }
 
-  public static async consultar(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, date}: {estado: string, municipio: string|undefined, date: string} = req.body;
-
+  public static async consultarTodos(req: Request, res:Response){
     try{
-      isValidEstado(estado)
-      isValidDate(date)
-      const cod: string | undefined = await obterCod(estado,municipio)
-      const strCode: string = isValidCode(cod)
-
-      const result = await FeriadoService.consultar(strCode, date);
-      res.status(200).send(result)
+      const result = await FeriadoService.consultarTodos();
+      res.status(200).send(result);
     }
     catch(e) {
       console.error(e);
       res.status(404).send("An error occured");
     }
-  } 
+  }
+
+  public static async consultar(req: Request, res:Response): Promise<void> {
+    const {estado, municipio, date}: {estado: string, municipio: string|undefined, date: string} = req.body;
+
+    try{
+      const validCod = await validateAll(estado, municipio, date);
+      const result:FeriadoEstadual|FeriadoMunicipal|{message: string} = await FeriadoService.consultar(validCod , date);
+      res.status(200).send(result);
+    }
+    catch(e) {
+      console.error(e);
+      res.status(404).send("An error occured");
+    }
+  }
+
+  public static async cadastrar(req: Request, res:Response): Promise<void>{
+    const {estado, municipio, feriado, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
+    try{
+      const validCod = await validateAll(estado, municipio, date);
+      const result:FeriadoEstadual|FeriadoMunicipal|{message: string} = await FeriadoService.cadastrar(validCod, feriado, date);
+      res.status(200).send(result)
+    } catch(e){
+      console.error(e);
+      res.status(404).send("An error occured");
+    }
+  }
+
+  public static async deletar(req: Request, res:Response): Promise<void>{
+    const {estado, municipio, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
+    try{
+      const validCod = await validateAll(estado, municipio, date);
+      const result: void|{message: string} = await FeriadoService.deletar(validCod, date);
+      res.status(204).send(result)
+    } catch(e){
+      console.error(e);
+      res.status(404).send("An error occured");
+    }
+  }
 }
