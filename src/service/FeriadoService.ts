@@ -8,7 +8,7 @@ export default class FeriadoService {
   }
 
   public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal> {
-    let result;
+    let result: FeriadoEstadual | null;
     if(cod.length === 2) {
       result = await prisma.feriadoEstadual.findFirst({ where: { dataFeriado: data } });
     }
@@ -22,18 +22,17 @@ export default class FeriadoService {
   }
 
   public static async cadastrar(cod: string, estado: string, municipio: string|undefined, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal>  {
-    let result;
-
     const verify = await verificar(cod, date);
     if(verify !== false){
       const id: number = verify;
-      this.alterar(cod, feriado, id);
+      return await this.alterar(cod, feriado, id);
     }
-
+    
+    let result;
     if(cod.length === 2) {
       result = await prisma.feriadoEstadual.create({
         data: {
-          codEstado: Number(estado),
+          cod: Number(cod),
           dataFeriado: date,
           nomeFeriado: feriado,
           tipoMovel: false
@@ -43,8 +42,7 @@ export default class FeriadoService {
     else {
       result = await prisma.feriadoMunicipal.create({
         data: {
-          codMunicipio: Number(municipio),
-          codEstado: Number(estado),
+          cod: Number(cod),
           dataFeriado: date,
           nomeFeriado: feriado,
           tipoMovel: false
@@ -57,7 +55,7 @@ export default class FeriadoService {
     return result
   }
 
-  public static async alterar(cod: string, feriado: string, id: number){
+  public static async alterar(cod: string, feriado: string, id: number): Promise<FeriadoEstadual|FeriadoMunicipal>{
     let result;
     if(cod.length === 2) {
       result = await prisma.feriadoEstadual.update({

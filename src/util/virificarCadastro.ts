@@ -6,7 +6,7 @@ export default async function verificar(cod: string, date: string){
     if(cod.length === 2) {
       verify = await prisma.feriadoEstadual.findFirst({
         where: { 
-          codEstado: Number(cod),
+          cod: Number(cod),
           dataFeriado: date
         }
       });
@@ -14,7 +14,7 @@ export default async function verificar(cod: string, date: string){
     else {
       verify = await prisma.feriadoMunicipal.findFirst({
         where: { 
-          codMunicipio: Number(cod),
+          cod: Number(cod),
           dataFeriado: date
         }
       });
