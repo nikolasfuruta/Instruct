@@ -8,115 +8,135 @@ export default class FeriadoService {
   }
 
   public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal> {
-    let result: FeriadoEstadual | null;
-    if(cod.length === 2) {
-      result = await prisma.feriadoEstadual.findFirst({
-        where: {
-          cod: Number(cod),
-          dataFeriado: data
-        }
-      });
+    try{
+      let result: FeriadoEstadual|FeriadoMunicipal| null
+      if(cod.length === 2) {
+        result = await prisma.feriadoEstadual.findFirst({
+          where: {
+            cod: Number(cod),
+            dataFeriado: data
+          }
+        });
+      }
+      else {
+        result = await prisma.feriadoMunicipal.findFirst({ 
+          where: {
+            cod: Number(cod),
+            dataFeriado: data 
+          } 
+        });
+      }
+      if(!result){
+        throw new Error("Not Found");
+      }
+      return result;
     }
-    else {
-      result = await prisma.feriadoMunicipal.findFirst({ 
-        where: {
-          cod: Number(cod),
-          dataFeriado: data 
-        } 
-      });
+    catch(e) {
+      throw new Error("Database error");
     }
-    if(!result){
-      throw new Error("Not Found")
-    }
-    return result
+    
   }
 
   public static async cadastrar(cod: string, estado: string, municipio: string|undefined, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal>  {
-    const registry = await isThereAnyRegistry(cod, date);
-    if(registry!== false){
-      const id: number = registry;
-      return await this.alterar(cod, feriado, id);
+    try{
+      const registry = await isThereAnyRegistry(cod, date);
+      if(registry!== false){
+        const id: number = registry;
+        return await this.alterar(cod, feriado, id);
+      }
+      let result: FeriadoEstadual|FeriadoMunicipal;
+      if(cod.length === 2) {
+        result = await prisma.feriadoEstadual.create({
+          data: {
+            cod: Number(cod),
+            dataFeriado: date,
+            nomeFeriado: feriado,
+            tipoMovel: false
+          }
+        });
+      }
+      else {
+        result = await prisma.feriadoMunicipal.create({
+          data: {
+            cod: Number(cod),
+            dataFeriado: date,
+            nomeFeriado: feriado,
+            tipoMovel: false
+          }
+        });
+      }
+      if(!result){
+        throw new Error("Registration fail");
+      }
+      return result;
     }
-    let result: FeriadoEstadual|FeriadoMunicipal;
-    if(cod.length === 2) {
-      result = await prisma.feriadoEstadual.create({
-        data: {
-          cod: Number(cod),
-          dataFeriado: date,
-          nomeFeriado: feriado,
-          tipoMovel: false
-        }
-      });
+    catch(e) {
+      throw new Error("Database error");
     }
-    else {
-      result = await prisma.feriadoMunicipal.create({
-        data: {
-          cod: Number(cod),
-          dataFeriado: date,
-          nomeFeriado: feriado,
-          tipoMovel: false
-        }
-      });
-    }
-    if(!result){
-      throw new Error("Registration fail")
-    }
-    return result
   }
 
   public static async alterar(cod: string, feriado: string, id: number): Promise<FeriadoEstadual|FeriadoMunicipal>{
-    let result: FeriadoEstadual|FeriadoMunicipal;
-    if(cod.length === 2) {
-      result = await prisma.feriadoEstadual.update({
-        where: {
-          id: id
-        },
-        data: {
-          nomeFeriado: feriado
-        }
-      });
+    try{
+      let result: FeriadoEstadual|FeriadoMunicipal;
+      if(cod.length === 2) {
+        result = await prisma.feriadoEstadual.update({
+          where: {
+            id: id
+          },
+          data: {
+            nomeFeriado: feriado
+          }
+        });
+      }
+      else {
+        result = await prisma.feriadoMunicipal.update({
+          where: {
+            id: id
+          },
+          data: {
+            nomeFeriado: feriado
+          }
+        });
+      }
+      if(!result){
+        throw new Error("Alteration fail");
+      }
+      return result;
     }
-    else {
-      result = await prisma.feriadoMunicipal.update({
-        where: {
-          id: id
-        },
-        data: {
-          nomeFeriado: feriado
-        }
-      });
+    catch(e){
+      throw new Error("Database error");
     }
-    if(!result){
-      throw new Error("Alteration fail");
-    }
-    return result;
   }
 
-  public static async deletar(cod: string, date: string):Promise<FeriadoEstadual|FeriadoMunicipal>{
-    const registry = await isThereAnyRegistry(cod, date);
-    if(registry == false){
-      throw new Error("Not Found") 
+  public static async deletar(cod: string, date: string): Promise<void>{
+    try{
+      const registry = await isThereAnyRegistry(cod, date);
+      if(registry == false){
+        throw new Error("Not Found") 
+      }
+      let result;
+      const id: number = registry;
+      if(cod.length === 2) {
+        result = await prisma.feriadoEstadual.delete({
+          where: {
+            id: id
+          }
+        });
+      }
+      else {
+        result = await prisma.feriadoMunicipal.delete({
+          where: {
+            id: id
+          }
+        });
+      }
+      if(!result){
+        throw new Error("Delete fail");
+      }
+      return;
     }
-
-    const id: number = registry;
-    let result: FeriadoEstadual|FeriadoMunicipal;
-    if(cod.length === 2) {
-      result = await prisma.feriadoEstadual.delete({
-        where: {
-          id: id
-        }
-      });
+    catch(e){
+      throw new Error("Database error");
     }
-    else {
-      result = await prisma.feriadoMunicipal.delete({
-        where: {
-          id: id
-        }
-      });
-    }
-    if(!result){
-      throw new Error("Delete fail");
-    }
-    return result
   }
 }
