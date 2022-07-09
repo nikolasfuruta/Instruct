@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Buscador de Feriados</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="../src/server.ts" defer></script>
+  </head>
+  <body>
+    <form action="http://localhost:5050/feriados" method="post">
+      <fieldset>
+        <label for="estado">Estado</label>
+        <input type="text" name="estado" id="estado" required><br>
+        <label for="municipio">Municipio</label>
+        <input type="text" name="municipio" id="municipio"><br>
+        <label for="date">Data</label>
+        <input type="date" name="date" id="date" required><br>
+      </fieldset>
+      <input type="submit" value="Buscar">
+    </form>
+  </body>
+</html>
