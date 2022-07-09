@@ -15,12 +15,23 @@ export default class FeriadoController {
     }
   }
 
+  public static async consultarTodos(req: Request, res:Response){
+    try{
+      const result = await FeriadoService.consultarTodos();
+      res.status(200).send(result);
+    }
+    catch(e) {
+      console.error(e);
+      res.status(404).send("An error occured");
+    }
+  }
+
   public static async consultar(req: Request, res:Response): Promise<void> {
     const {estado, municipio, date}: {estado: string, municipio: string|undefined, date: string} = req.body;
 
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.consultar(validCod , date);
+      const result:FeriadoEstadual|FeriadoMunicipal|{message: string} = await FeriadoService.consultar(validCod , date);
       res.status(200).send(result);
     }
     catch(e) {
@@ -33,7 +44,7 @@ export default class FeriadoController {
     const {estado, municipio, feriado, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.cadastrar(validCod, estado, municipio, feriado, date);
+      const result:FeriadoEstadual|FeriadoMunicipal|{message: string} = await FeriadoService.cadastrar(validCod, feriado, date);
       res.status(200).send(result)
     } catch(e){
       console.error(e);
@@ -41,12 +52,12 @@ export default class FeriadoController {
     }
   }
 
-  public static async deletar(req: Request, res:Response){
+  public static async deletar(req: Request, res:Response): Promise<void>{
     const {estado, municipio, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
-      await FeriadoService.deletar(validCod, date);
-      res.status(204).send({message: "Delete succeeded"})
+      const result: void|{message: string} = await FeriadoService.deletar(validCod, date);
+      res.status(204).send(result)
     } catch(e){
       console.error(e);
       res.status(404).send("An error occured");

@@ -7,7 +7,21 @@ export default class FeriadoService {
     return await prisma.feriadoNacional.findMany()
   }
 
-  public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal> {
+  public static async consultarTodos(): Promise<"Not Found"|{resultEstado: FeriadoEstadual[],resultMunicipio: FeriadoMunicipal[]}>{
+    try{
+      const resultEstado = await prisma.feriadoEstadual.findMany({});
+      const resultMunicipio = await prisma.feriadoMunicipal.findMany({});
+      if(!resultEstado || !resultMunicipio){
+        return ("Not Found")
+      }
+      return { resultEstado, resultMunicipio }
+    }
+    catch(e){
+      throw new Error("Database error");
+    }
+  }
+
+  public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal|{message: string}> {
     try{
       let result: FeriadoEstadual|FeriadoMunicipal| null
       if(cod.length === 2) {
@@ -27,7 +41,7 @@ export default class FeriadoService {
         });
       }
       if(!result){
-        throw new Error("Not Found");
+        return({message: "Not Found"});
       }
       return result;
     }
@@ -37,7 +51,7 @@ export default class FeriadoService {
     
   }
 
-  public static async cadastrar(cod: string, estado: string, municipio: string|undefined, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal>  {
+  public static async cadastrar(cod: string, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>  {
     try{
       const registry = await isThereAnyRegistry(cod, date);
       if(registry!== false){
@@ -66,7 +80,7 @@ export default class FeriadoService {
         });
       }
       if(!result){
-        throw new Error("Registration fail");
+        return({message:"Registration fail"});
       }
       return result;
     }
@@ -75,7 +89,7 @@ export default class FeriadoService {
     }
   }
 
-  public static async alterar(cod: string, feriado: string, id: number): Promise<FeriadoEstadual|FeriadoMunicipal>{
+  public static async alterar(cod: string, feriado: string, id: number): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>{
     try{
       let result: FeriadoEstadual|FeriadoMunicipal;
       if(cod.length === 2) {
@@ -99,7 +113,7 @@ export default class FeriadoService {
         });
       }
       if(!result){
-        throw new Error("Alteration fail");
+        return({message:"Alteration fail"});
       }
       return result;
     }
@@ -108,7 +122,7 @@ export default class FeriadoService {
     }
   }
 
-  public static async deletar(cod: string, date: string): Promise<void>{
+  public static async deletar(cod: string, date: string): Promise<void|{message:string}>{
     try{
       const registry = await isThereAnyRegistry(cod, date);
       if(registry == false){
@@ -131,7 +145,7 @@ export default class FeriadoService {
         });
       }
       if(!result){
-        throw new Error("Delete fail");
+        return({message:"Delete fail"});
       }
       return;
     }
