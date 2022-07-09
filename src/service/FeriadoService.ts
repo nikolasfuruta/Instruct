@@ -10,10 +10,20 @@ export default class FeriadoService {
   public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal> {
     let result: FeriadoEstadual | null;
     if(cod.length === 2) {
-      result = await prisma.feriadoEstadual.findFirst({ where: { dataFeriado: data } });
+      result = await prisma.feriadoEstadual.findFirst({
+        where: {
+          cod: Number(cod),
+          dataFeriado: data
+        }
+      });
     }
     else {
-      result = await prisma.feriadoMunicipal.findFirst({ where: { dataFeriado: data } });
+      result = await prisma.feriadoMunicipal.findFirst({ 
+        where: {
+          cod: Number(cod),
+          dataFeriado: data 
+        } 
+      });
     }
     if(!result){
       throw new Error("Not Found")
@@ -63,7 +73,7 @@ export default class FeriadoService {
           id: id
         },
         data: {
-          dataFeriado: feriado
+          nomeFeriado: feriado
         }
       });
     }
@@ -73,7 +83,7 @@ export default class FeriadoService {
           id: id
         },
         data: {
-          dataFeriado: feriado
+          nomeFeriado: feriado
         }
       });
     }

@@ -45,7 +45,6 @@ export default class FeriadoController {
       const strCode: string = isValidCode(cod);
 
       const result:FeriadoEstadual | FeriadoMunicipal = await FeriadoService.cadastrar(strCode, estado, municipio, feriado, date);
-      console.log(result)
       res.status(200).send(result)
     } catch(e){
       console.error(e);
