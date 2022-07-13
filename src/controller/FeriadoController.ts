@@ -56,8 +56,8 @@ export default class FeriadoController {
     const {estado, municipio, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result: void|{message: string} = await FeriadoService.deletar(validCod, date);
-      res.status(204).send(result)
+      await FeriadoService.deletar(validCod, date);
+      res.status(204).send({message:"deleted"})
     } catch(e){
       console.error(e);
       res.status(404).send("An error occured");

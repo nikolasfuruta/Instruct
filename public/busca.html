@@ -11,13 +11,17 @@
     <form action="http://localhost:5050/feriados/consultar" method="post">
       <fieldset>
         <label for="estado">Estado</label>
-        <input type="text" name="estado" id="estado" required><br>
+        <input type="text" name="estado" id="estado" required placeholder="SP, RJ, BH"><br>
         <label for="municipio">Municipio</label>
-        <input type="text" name="municipio" id="municipio"><br>
+        <input type="text" name="municipio" id="municipio" placeholder="sao-paulo"><br>
         <label for="date">Data</label>
-        <input type="date" name="date" id="date" required><br>
+        <input type="date" name="date" id="date" required><br><br>
+        <input type="submit" value="Buscar" >
       </fieldset>
-      <input type="submit" value="Buscar">
+    </form><br>
+
+    <form action="http://localhost:5050/feriados/consultar" method="get">
+      <input type="submit" value="Buscar Todos">
     </form>
   </body>
 </html>
