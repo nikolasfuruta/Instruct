@@ -153,4 +153,44 @@ export default class FeriadoService {
       throw new Error("Database error");
     }
   }
+
+  public static async cadastrarMovel(cod: string, feriado: string, date:Date | undefined): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>{
+    const dateStr = date!.toISOString()
+    console.log(dateStr)
+    try{
+      const registry = await isThereAnyRegistry(cod, dateStr);
+      if(registry!== false){
+        const id: number = registry;
+        return await this.alterar(cod, feriado, id);
+      }
+      let result: FeriadoEstadual|FeriadoMunicipal;
+      if(cod.length === 2) {
+        result = await prisma.feriadoEstadual.create({
+          data: {
+            cod: Number(cod),
+            dataFeriado: dateStr,
+            nomeFeriado: feriado,
+            tipoMovel: true
+          }
+        });
+      }
+      else {
+        result = await prisma.feriadoMunicipal.create({
+          data: {
+            cod: Number(cod),
+            dataFeriado: dateStr,
+            nomeFeriado: feriado,
+            tipoMovel: true
+          }
+        });
+      }
+      if(!result){
+        return({message:"Registration fail"});
+      }
+      return result;
+    }
+    catch(e) {
+      throw new Error("Database error");
+    }
+  };
 }

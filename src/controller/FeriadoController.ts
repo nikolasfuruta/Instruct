@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import FeriadoService from "../service/FeriadoService";
-import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
 import validateAll from '../util/validateAll'
+import feriadoMovel from "../util/feriados/feriadoMovel";
 
 export default class FeriadoController {
   public static async teste(req: Request, res:Response): Promise<void >{
@@ -31,7 +31,7 @@ export default class FeriadoController {
 
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result:FeriadoEstadual|FeriadoMunicipal|{message: string} = await FeriadoService.consultar(validCod , date);
+      const result = await FeriadoService.consultar(validCod , date);
       res.status(200).send(result);
     }
     catch(e) {
@@ -44,7 +44,7 @@ export default class FeriadoController {
     const {estado, municipio, feriado, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result:FeriadoEstadual|FeriadoMunicipal|{message: string} = await FeriadoService.cadastrar(validCod, feriado, date);
+      const result = await FeriadoService.cadastrar(validCod, feriado, date);
       res.status(200).send(result)
     } catch(e){
       console.error(e);
@@ -58,6 +58,21 @@ export default class FeriadoController {
       const validCod = await validateAll(estado, municipio, date);
       await FeriadoService.deletar(validCod, date);
       res.status(204).send({message:"deleted"})
+    } catch(e){
+      console.error(e);
+      res.status(404).send("An error occured");
+    }
+  }
+
+  /******************************************************************************************************************************************************************/
+
+  public static async cadastrarMovel(req: Request, res:Response): Promise<void> {
+    const {estado, municipio, feriado}: {estado: string, municipio: string|undefined, feriado: string} = req.body;
+    try{
+      const validCod = await validateAll(estado, municipio);
+      const date = feriadoMovel(feriado);
+      const result = await FeriadoService.cadastrarMovel(validCod, feriado, date);
+      res.status(200).send(result)
     } catch(e){
       console.error(e);
       res.status(404).send("An error occured");

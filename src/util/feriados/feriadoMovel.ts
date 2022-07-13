@@ -1,26 +1,34 @@
-import { Carnaval, CorpusChristi, SextaFeiraSanta } from "./interfaces";
 import pascoaData from "./pascoa";
 
 const pascoa = pascoaData()
-const pascoaDia: number = pascoa.dia;
+const pascoaDia: number = pascoa.getDay()
 
-export default function regraFeriadoCarnaval(): Carnaval {
-  const carnavalDia: number = pascoaDia - 47;
-  const carnavalMes: number = pascoa.mes;
+export function regraFeriadoCarnaval(): Date{
+  const dia: number = pascoaDia - 47;
+  const mes: number = pascoa.getMonth();
 
-  return {carnavalDia, carnavalMes}
+  return new Date(dia,mes)
 }
 
-export function regraFeriadoCorpusChristi(): CorpusChristi {
-  const corpusChristiDia: number = pascoaDia + 60;
-  const corpusChristiMes: number = pascoa.mes;
+export function regraFeriadoCorpusChristi(): Date{
+  const dia: number = pascoaDia + 60;
+  const mes: number = pascoa.getMonth();
 
-  return {corpusChristiDia, corpusChristiMes}
+  return new Date(dia,mes)
 }
 
-export function regraFeriadoSextaFeiraSanta(): SextaFeiraSanta {
-  const sextaFeiraSantaDia: number = pascoaDia + 60;
-  const sextaFeiraSantaMes: number = pascoa.mes;
+export function regraFeriadoSextaFeiraSanta(): Date {
+  const dia: number  = pascoaDia + 60;
+  const mes: number  = pascoa.getMonth();
 
-  return {sextaFeiraSantaDia, sextaFeiraSantaMes}
+  return new Date(dia,mes)
+}
+
+export default function feriadoMovel(feriado: string){
+  switch(feriado) {
+    case "carnaval" : return regraFeriadoCarnaval();
+    case "corpus-christi": return regraFeriadoCorpusChristi();
+    case "sexta-feira-santa": return regraFeriadoSextaFeiraSanta();
+    case "pascoa": return pascoaData();
+  }
 }

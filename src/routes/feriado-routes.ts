@@ -10,10 +10,12 @@ router.route("/feriados/consultar")
   .get(FeriadoController.consultarTodos)
   .post(middParam, FeriadoController.consultar);
 
-  router.route("/feriados/cadastrar")
+router.route("/feriados/cadastrar")
   .post(middParam, FeriadoController.cadastrar);
 
-  router.route("/feriados/deletar")
+router.route("/feriados/deletar")
   .post(middParam, FeriadoController.deletar);
 
+router.route("/feriados/cadastrar-feriado-movel")
+  .post(middParam, FeriadoController.cadastrarMovel);
 export default router;

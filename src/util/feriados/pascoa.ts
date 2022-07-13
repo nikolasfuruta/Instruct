@@ -1,6 +1,4 @@
-import { Pascoa } from "./interfaces";
-
-export default function pascoaData(): Pascoa{
+export default function pascoaData(): Date{
   const ano  = new Date().getUTCFullYear();
   const a  = ano % 19;
   const b = Math.trunc(ano / 100);
@@ -17,5 +15,5 @@ export default function pascoaData(): Pascoa{
   const mes = Math.trunc((h + l - 7*m + 114) / 31);
   const dia = 1 + Math.trunc((h + l - 7*m + 114) / 31);
 
-  return {mes, dia}
+  return new Date(dia,mes)
 }
