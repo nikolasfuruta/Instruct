@@ -45,7 +45,7 @@ export default class FeriadoController {
     try{
       const validCod = await validateAll(estado, municipio, date);
       const result = await FeriadoService.cadastrar(validCod, feriado, date);
-      res.status(200).send(result)
+      res.status(200).send(result);
     } catch(e){
       console.error(e);
       res.status(404).send("An error occured");
@@ -57,7 +57,7 @@ export default class FeriadoController {
     try{
       const validCod = await validateAll(estado, municipio, date);
       await FeriadoService.deletar(validCod, date);
-      res.status(204).send({message:"deleted"})
+      res.status(204).send({message:"deleted"});
     } catch(e){
       console.error(e);
       res.status(404).send("An error occured");
@@ -72,8 +72,22 @@ export default class FeriadoController {
       const validCod = await validateAll(estado, municipio);
       const date = feriadoMovel(feriado);
       const result = await FeriadoService.cadastrarMovel(validCod, feriado, date);
-      res.status(200).send(result)
+      res.status(200).send(result);
     } catch(e){
+      console.error(e);
+      res.status(404).send("An error occured");
+    }
+  }
+
+  public static async deletarMovel(req: Request, res:Response): Promise<void> {
+    const {estado, municipio, feriado}: {estado: string, municipio: string|undefined, feriado: string} = req.body;
+    try{
+      const validCod = await validateAll(estado, municipio);
+      const date = feriadoMovel(feriado);
+      await FeriadoService.deletarMovel(validCod, date);
+      res.status(204).send({message:"deleted"});
+    }
+    catch(e){
       console.error(e);
       res.status(404).send("An error occured");
     }

@@ -17,12 +17,12 @@ export function regraFeriadoSextaFeiraSanta(): moment.Moment{
   return data;
 }
 
-export default function feriadoMovel(feriado: string){
+export default function feriadoMovel(feriado: string): moment.Moment {
   switch(feriado) {
     case "carnaval" : return regraFeriadoCarnaval();
     case "corpus-christi": return regraFeriadoCorpusChristi();
     case "sexta-feira-santa": return regraFeriadoSextaFeiraSanta();
     case "pascoa": return pascoaData();
+    default: throw new Error("Invalid Feriado");
   }
 }
-regraFeriadoSextaFeiraSanta()

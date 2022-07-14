@@ -19,5 +19,5 @@ export default async function isThereAnyRegistry(cod: string, date: string){
         }
       });
     }
-    return registry? Number(registry.id) : false;
+    return registry ? Number(registry.id) : false;
 }
