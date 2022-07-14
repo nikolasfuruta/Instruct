@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export default function pascoaData(){
+export default function pascoaData(): moment.Moment{
   const ano  = moment().year();
   const a = ano % 19
   const b = Math.trunc(ano / 100);
@@ -17,8 +17,7 @@ export default function pascoaData(){
   const mes = Math.trunc((h + L - 7 * m + 114) / 31)
   const dia = 1 + (h + L - 7 * m + 114) % 31
   const date = moment(`${ano}-${mes}-${dia}`, "YYYY-MM-DD")
-  console.log(date)
-  //return new Date(dia,mes)
+  return date;
 }
 
-pascoaData()
+//pascoaData()

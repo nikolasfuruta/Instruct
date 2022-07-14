@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import FeriadoService from "../service/FeriadoService";
-import validateAll from '../util/validateAll'
+import validateAll from '../util/validation/validateAll'
 import feriadoMovel from "../util/feriados/feriadoMovel";
 
 export default class FeriadoController {
