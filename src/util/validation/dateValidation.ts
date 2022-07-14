@@ -1,7 +1,7 @@
-import validateDate from 'validate-date'
+import moment from 'moment'
 
 export default function isValidDate(date:string) {
-  if(!validateDate(date, 'boolean',"yyyy-mm-dd")){
+  if(!moment(date).isValid()){
     throw new Error("Invalid date")
   }
 }

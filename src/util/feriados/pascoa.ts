@@ -14,6 +14,6 @@ export default function pascoaData(): Date{
   const m = Math.trunc((a + 11*h + 22*l) / 451);
   const mes = Math.trunc((h + l - 7*m + 114) / 31);
   const dia = 1 + Math.trunc((h + l - 7*m + 114) / 31);
-
+  console.log(new Date(dia,mes))
   return new Date(dia,mes)
 }
