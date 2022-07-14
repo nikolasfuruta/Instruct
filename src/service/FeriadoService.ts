@@ -22,14 +22,14 @@ export default class FeriadoService {
     }
   }
 
-  public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal|{message: string}> {
+  public static async consultar(cod: string, data: moment.Moment): Promise<FeriadoEstadual|FeriadoMunicipal|{message: string}> {
     try{
       let result: FeriadoEstadual|FeriadoMunicipal| null
       if(cod.length === 2) {
         result = await prisma.feriadoEstadual.findFirst({
           where: {
             cod: Number(cod),
-            dataFeriado: data
+            dataFeriado: data.toISOString()
           }
         });
       }
@@ -37,7 +37,7 @@ export default class FeriadoService {
         result = await prisma.feriadoMunicipal.findFirst({ 
           where: {
             cod: Number(cod),
-            dataFeriado: data 
+            dataFeriado: data.toISOString()
           } 
         });
       }
@@ -52,7 +52,7 @@ export default class FeriadoService {
     
   }
 
-  public static async cadastrar(cod: string, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>  {
+  public static async cadastrar(cod: string, feriado: string, date: moment.Moment): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>  {
     try{
       const registry = await isThereAnyRegistry(cod, date);
       if(registry!== false){
@@ -64,7 +64,7 @@ export default class FeriadoService {
         result = await prisma.feriadoEstadual.create({
           data: {
             cod: Number(cod),
-            dataFeriado: date,
+            dataFeriado: date.toISOString(),
             nomeFeriado: feriado,
             tipoMovel: false
           }
@@ -74,7 +74,7 @@ export default class FeriadoService {
         result = await prisma.feriadoMunicipal.create({
           data: {
             cod: Number(cod),
-            dataFeriado: date,
+            dataFeriado: date.toISOString(),
             nomeFeriado: feriado,
             tipoMovel: false
           }
@@ -123,7 +123,7 @@ export default class FeriadoService {
     }
   }
 
-  public static async deletar(cod: string, date: string): Promise<void|{message:string}>{
+  public static async deletar(cod: string, date: moment.Moment): Promise<void|{message:string}>{
     try{
       const registry = await isThereAnyRegistry(cod, date);
       if(registry == false){
@@ -158,9 +158,8 @@ export default class FeriadoService {
 /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   public static async cadastrarMovel(cod: string, feriado: string, date:moment.Moment): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>{
-    const dateStr = date.format("YYYY-MM-DD");
     try{
-      const registry = await isThereAnyRegistry(cod, dateStr);
+      const registry = await isThereAnyRegistry(cod, date);
       if(registry!== false){
         const id: number = registry;
         return await this.alterar(cod, feriado, id);
@@ -170,7 +169,7 @@ export default class FeriadoService {
         result = await prisma.feriadoEstadual.create({
           data: {
             cod: Number(cod),
-            dataFeriado: dateStr,
+            dataFeriado: date.toISOString(),
             nomeFeriado: feriado,
             tipoMovel: true
           }
@@ -180,7 +179,7 @@ export default class FeriadoService {
         result = await prisma.feriadoMunicipal.create({
           data: {
             cod: Number(cod),
-            dataFeriado: dateStr,
+            dataFeriado: date.toISOString(),
             nomeFeriado: feriado,
             tipoMovel: true
           }
@@ -192,15 +191,14 @@ export default class FeriadoService {
       return result;
     }
     catch(e) {
+      console.error(e)
       throw new Error("Database error");
     }
   };
 
   public static async deletarMovel(cod: string, date:moment.Moment): Promise<void | { message: string;}> {
-    const dateStr = date.format("YYYY-MM-DD")
-    console.log(dateStr)
     try{
-      const registry = await isThereAnyRegistry(cod, dateStr);
+      const registry = await isThereAnyRegistry(cod, date);
       if(!registry){
         throw new Error("Not Found");
       }

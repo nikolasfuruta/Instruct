@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import FeriadoService from "../service/FeriadoService";
 import validateAll from '../util/validation/validateAll'
 import feriadoMovel from "../util/feriados/feriadoMovel";
+import moment from "moment";
 
 export default class FeriadoController {
   public static async teste(req: Request, res:Response): Promise<void >{
@@ -31,7 +32,8 @@ export default class FeriadoController {
 
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result = await FeriadoService.consultar(validCod , date);
+      const dateFormat = moment(date, "YYYY-MM-DD");
+      const result = await FeriadoService.consultar(validCod , dateFormat);
       res.status(200).send(result);
     }
     catch(e) {
@@ -44,7 +46,8 @@ export default class FeriadoController {
     const {estado, municipio, feriado, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
-      const result = await FeriadoService.cadastrar(validCod, feriado, date);
+      const dateFormat = moment(date, "YYYY-MM-DD");
+      const result = await FeriadoService.cadastrar(validCod, feriado, dateFormat);
       res.status(200).send(result);
     } catch(e){
       console.error(e);
@@ -56,7 +59,8 @@ export default class FeriadoController {
     const {estado, municipio, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
-      await FeriadoService.deletar(validCod, date);
+      const dateFormat = moment(date, "YYYY-MM-DD");
+      await FeriadoService.deletar(validCod, dateFormat );
       res.status(204).send({message:"deleted"});
     } catch(e){
       console.error(e);
