@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "test": "ts-node-dev --respawn --transpile-only ./src/util/feriados/pascoa.ts"
+    "test": "ts-node-dev --respawn --transpile-only ./src/util/feriados/feriadoMovel.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,27 +1,20 @@
 import pascoaData from "./pascoa";
 
 const pascoa = pascoaData()
-const pascoaDia: number = pascoa.getDay()
 
-export function regraFeriadoCarnaval(): Date{
-  const dia: number = pascoaDia - 47;
-  const mes: number = pascoa.getMonth();
-
-  return new Date(dia,mes)
+export function regraFeriadoCarnaval(): moment.Moment{
+  const data = pascoa.subtract(48,"d");
+  return data;
 }
 
-export function regraFeriadoCorpusChristi(): Date{
-  const dia: number = pascoaDia + 60;
-  const mes: number = pascoa.getMonth();
-
-  return new Date(dia,mes)
+export function regraFeriadoCorpusChristi(): moment.Moment{
+  const data = pascoa.add(60,"d");
+  return data;
 }
 
-export function regraFeriadoSextaFeiraSanta(): Date {
-  const dia: number  = pascoaDia + 60;
-  const mes: number  = pascoa.getMonth();
-
-  return new Date(dia,mes)
+export function regraFeriadoSextaFeiraSanta(): moment.Moment{
+  const data = pascoa.subtract(2,"d");
+  return data;
 }
 
 export default function feriadoMovel(feriado: string){
@@ -32,3 +25,4 @@ export default function feriadoMovel(feriado: string){
     case "pascoa": return pascoaData();
   }
 }
+regraFeriadoSextaFeiraSanta()
