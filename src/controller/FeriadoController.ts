@@ -18,7 +18,7 @@ export default class FeriadoController {
   }
 
   public static async consultar(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, date}: {estado: string, municipio: string|undefined, date: string} = req.body;
+    const {estado, municipio, date}: {estado: string, municipio?: string, date: string} = req.body;
 
     try{
       const validCod = await validateAll(estado, municipio, date);
@@ -33,7 +33,7 @@ export default class FeriadoController {
   }
 
   public static async cadastrar(req: Request, res:Response): Promise<void>{
-    const {estado, municipio, feriado, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
+    const {estado, municipio, feriado, date}: {estado: string, municipio?: string, feriado: string, date: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio, date);
       const dateFormat = moment(date, "YYYY-MM-DD");
@@ -46,11 +46,9 @@ export default class FeriadoController {
   }
 
   public static async deletar(req: Request, res:Response): Promise<void>{
-    const {estado, municipio, date}: {estado: string, municipio: string|undefined, feriado: string, date: string} = req.body;
+    const {cod, id}: {cod: string, id: string} = req.body
     try{
-      const validCod = await validateAll(estado, municipio, date);
-      const dateFormat = moment(date, "YYYY-MM-DD");
-      await FeriadoService.deletar(validCod, dateFormat );
+      await FeriadoService.deletar(cod, Number(id));
       res.status(204).send({message:"deleted"});
     } catch(e){
       console.error(e);
@@ -61,7 +59,7 @@ export default class FeriadoController {
   /******************************************************************************************************************************************************************/
 
   public static async cadastrarMovel(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, feriado}: {estado: string, municipio: string|undefined, feriado: string} = req.body;
+    const {estado, municipio, feriado}: {estado: string, municipio?: string, feriado: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio);
       const date = feriadoMovel(feriado);
@@ -74,7 +72,7 @@ export default class FeriadoController {
   }
 
   public static async deletarMovel(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, feriado}: {estado: string, municipio?: string|undefined, feriado: string} = req.body;
+    const {estado, municipio, feriado}: {estado: string, municipio?: string, feriado: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio);
       const date = feriadoMovel(feriado);

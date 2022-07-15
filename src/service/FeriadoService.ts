@@ -120,19 +120,14 @@ export default class FeriadoService {
     }
   }
 
-  public static async deletar(cod: string, date: moment.Moment, feriado?: string): Promise<void|{message:string}>{
+  public static async deletar(cod: string, id: number): Promise<void|{message:string}>{
     try{
-      const registry = await isThereAnyRegistry(cod, date, feriado);
-      if(registry == false){
-        throw new Error("Not Found") 
-      }
-
-      let result;
+      let result: FeriadoEstadual|FeriadoMunicipal;
       if(cod.length === 2) {
-        result = await prisma.feriadoEstadual.delete({ where: { id: registry } });
+        result = await prisma.feriadoEstadual.delete({ where: { id: id } });
       }
       else {
-        result = await prisma.feriadoMunicipal.delete({ where: { id: registry } });
+        result = await prisma.feriadoMunicipal.delete({ where: { id: id } });
       }
 
       if(!result){

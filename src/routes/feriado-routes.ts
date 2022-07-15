@@ -12,7 +12,7 @@ router.route("/feriados/cadastrar")
   .post(middParam, FeriadoController.cadastrar);
 
 router.route("/feriados/deletar")
-  .post(middParam, FeriadoController.deletar);
+  .post(FeriadoController.deletar);
 
 /***********************************************************/
 
