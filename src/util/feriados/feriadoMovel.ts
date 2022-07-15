@@ -1,26 +1,28 @@
-import { Carnaval, CorpusChristi, SextaFeiraSanta } from "./interfaces";
 import pascoaData from "./pascoa";
 
 const pascoa = pascoaData()
-const pascoaDia: number = pascoa.dia;
 
-export default function regraFeriadoCarnaval(): Carnaval {
-  const carnavalDia: number = pascoaDia - 47;
-  const carnavalMes: number = pascoa.mes;
-
-  return {carnavalDia, carnavalMes}
+export function regraFeriadoCarnaval(): moment.Moment{
+  const data = pascoa.subtract(48,"d");
+  return data;
 }
 
-export function regraFeriadoCorpusChristi(): CorpusChristi {
-  const corpusChristiDia: number = pascoaDia + 60;
-  const corpusChristiMes: number = pascoa.mes;
-
-  return {corpusChristiDia, corpusChristiMes}
+export function regraFeriadoCorpusChristi(): moment.Moment{
+  const data = pascoa.add(60,"d");
+  return data;
 }
 
-export function regraFeriadoSextaFeiraSanta(): SextaFeiraSanta {
-  const sextaFeiraSantaDia: number = pascoaDia + 60;
-  const sextaFeiraSantaMes: number = pascoa.mes;
+export function regraFeriadoSextaFeiraSanta(): moment.Moment{
+  const data = pascoa.subtract(2,"d");
+  return data;
+}
 
-  return {sextaFeiraSantaDia, sextaFeiraSantaMes}
+export default function feriadoMovel(feriado: string): moment.Moment {
+  switch(feriado) {
+    case "carnaval" : return regraFeriadoCarnaval();
+    case "corpus-christi": return regraFeriadoCorpusChristi();
+    case "sexta-feira-santa": return regraFeriadoSextaFeiraSanta();
+    case "pascoa": return pascoaData();
+    default: throw new Error("Invalid Feriado");
+  }
 }

@@ -1,11 +1,9 @@
 import { FeriadoEstadual, FeriadoMunicipal } from "@prisma/client";
+import moment from "moment";
 import prisma from "../database/prisma";
-import isThereAnyRegistry from "../util/verifyRestry";
+import isThereAnyRegistry from "../util/isThereAnyRegistry";
 
 export default class FeriadoService {
-  public static async teste(){
-    return await prisma.feriadoNacional.findMany()
-  }
 
   public static async consultarTodos(): Promise<"Not Found"|{resultEstado: FeriadoEstadual[],resultMunicipio: FeriadoMunicipal[]}>{
     try{
@@ -21,14 +19,14 @@ export default class FeriadoService {
     }
   }
 
-  public static async consultar(cod: string, data: string): Promise<FeriadoEstadual|FeriadoMunicipal|{message: string}> {
+  public static async consultar(cod: string, data: moment.Moment): Promise<FeriadoEstadual|FeriadoMunicipal|{message: string}> {
     try{
       let result: FeriadoEstadual|FeriadoMunicipal| null
       if(cod.length === 2) {
         result = await prisma.feriadoEstadual.findFirst({
           where: {
             cod: Number(cod),
-            dataFeriado: data
+            dataFeriado: data.toISOString()
           }
         });
       }
@@ -36,7 +34,7 @@ export default class FeriadoService {
         result = await prisma.feriadoMunicipal.findFirst({ 
           where: {
             cod: Number(cod),
-            dataFeriado: data 
+            dataFeriado: data.toISOString()
           } 
         });
       }
@@ -51,10 +49,10 @@ export default class FeriadoService {
     
   }
 
-  public static async cadastrar(cod: string, feriado: string, date: string): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>  {
+  public static async cadastrar(cod: string, feriado: string, date: moment.Moment, movel: boolean): Promise<FeriadoEstadual|FeriadoMunicipal|{message:string}>  {
     try{
       const registry = await isThereAnyRegistry(cod, date);
-      if(registry!== false){
+      if(registry){
         const id: number = registry;
         return await this.alterar(cod, feriado, id);
       }
@@ -63,9 +61,9 @@ export default class FeriadoService {
         result = await prisma.feriadoEstadual.create({
           data: {
             cod: Number(cod),
-            dataFeriado: date,
+            dataFeriado: date.toISOString(),
             nomeFeriado: feriado,
-            tipoMovel: false
+            tipoMovel: movel
           }
         });
       }
@@ -73,9 +71,9 @@ export default class FeriadoService {
         result = await prisma.feriadoMunicipal.create({
           data: {
             cod: Number(cod),
-            dataFeriado: date,
+            dataFeriado: date.toISOString(),
             nomeFeriado: feriado,
-            tipoMovel: false
+            tipoMovel: movel
           }
         });
       }
@@ -122,28 +120,16 @@ export default class FeriadoService {
     }
   }
 
-  public static async deletar(cod: string, date: string): Promise<void|{message:string}>{
+  public static async deletar(cod: string, id: number): Promise<void|{message:string}>{
     try{
-      const registry = await isThereAnyRegistry(cod, date);
-      if(registry == false){
-        throw new Error("Not Found") 
-      }
-      let result;
-      const id: number = registry;
+      let result: FeriadoEstadual|FeriadoMunicipal;
       if(cod.length === 2) {
-        result = await prisma.feriadoEstadual.delete({
-          where: {
-            id: id
-          }
-        });
+        result = await prisma.feriadoEstadual.delete({ where: { id: id } });
       }
       else {
-        result = await prisma.feriadoMunicipal.delete({
-          where: {
-            id: id
-          }
-        });
+        result = await prisma.feriadoMunicipal.delete({ where: { id: id } });
       }
+
       if(!result){
         return({message:"Delete fail"});
       }
