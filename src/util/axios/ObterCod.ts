@@ -1,4 +1,4 @@
-import axios , { AxiosResponse } from "axios";
+import axios  from "axios";
 import { load } from 'cheerio';
 
 export default async function obterCod(estado: string, municipio?: string): Promise<string | undefined>{
@@ -14,7 +14,7 @@ export default async function obterCod(estado: string, municipio?: string): Prom
 
 export async function gerarCod(url: string): Promise<string | undefined> {
   try{
-    const response: AxiosResponse = await axios(url)
+    const response = await axios(url)
     const html: string = response.data;
     const $ = load(html);
     const tag = $('#responseMunicipios');

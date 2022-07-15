@@ -5,16 +5,6 @@ import feriadoMovel from "../util/feriados/feriadoMovel";
 import moment from "moment";
 
 export default class FeriadoController {
-  public static async teste(req: Request, res:Response): Promise<void >{
-    try {
-      const result = await FeriadoService.teste();
-      res.status(200).send(result);
-    }
-    catch(e) {
-      console.error(e);
-      res.status(500).send("An error occured");
-    }
-  }
 
   public static async consultarTodos(req: Request, res:Response){
     try{
@@ -84,7 +74,7 @@ export default class FeriadoController {
   }
 
   public static async deletarMovel(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, feriado}: {estado: string, municipio: string|undefined, feriado: string} = req.body;
+    const {estado, municipio, feriado}: {estado: string, municipio?: string|undefined, feriado: string} = req.body;
     try{
       const validCod = await validateAll(estado, municipio);
       const date = feriadoMovel(feriado);

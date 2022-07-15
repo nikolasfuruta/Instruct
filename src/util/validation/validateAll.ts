@@ -7,8 +7,8 @@ export default async function validateAll(estado: string, municipio?: string, da
   try{
     isValidEstado(estado);
     if(date) isValidDate(date);
-    const cod: string | undefined = await obterCod(estado,municipio);
-    const validCode: string = isValidCode(cod);
+    const cod = await obterCod(estado,municipio);
+    const validCode = isValidCode(cod);
     return validCode
   }
   catch(e) {

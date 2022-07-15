@@ -4,8 +4,6 @@ import middParam from "../util/middleWares/paramsValidation";
 
 const router = Router();
 
-router.route("/feriados").get(FeriadoController.teste);
-
 router.route("/feriados/consultar")
   .get(FeriadoController.consultarTodos)
   .post(middParam, FeriadoController.consultar);
@@ -15,6 +13,8 @@ router.route("/feriados/cadastrar")
 
 router.route("/feriados/deletar")
   .post(middParam, FeriadoController.deletar);
+
+/***********************************************************/
 
 router.route("/feriados/cadastrar-movel")
   .post(middParam, FeriadoController.cadastrarMovel);
