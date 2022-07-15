@@ -33,11 +33,13 @@ export default class FeriadoController {
   }
 
   public static async cadastrar(req: Request, res:Response): Promise<void>{
-    const {estado, municipio, feriado, date}: {estado: string, municipio?: string, feriado: string, date: string} = req.body;
+    const {estado, municipio, feriado, date, movel}: {estado: string, municipio?: string, feriado: string, date?: string, movel: boolean} = req.body;
     try{
+      let dateFormat;
       const validCod = await validateAll(estado, municipio, date);
-      const dateFormat = moment(date, "YYYY-MM-DD");
-      const result = await FeriadoService.cadastrar(validCod, feriado, dateFormat);
+      date ?  dateFormat = moment(date, "YYYY-MM-DD") : dateFormat = feriadoMovel(feriado);
+      
+      const result = await FeriadoService.cadastrar(validCod, feriado, dateFormat, movel);
       res.status(200).send(result);
     } catch(e){
       console.error(e);
@@ -46,9 +48,9 @@ export default class FeriadoController {
   }
 
   public static async deletar(req: Request, res:Response): Promise<void>{
-    const {cod, id}: {cod: string, id: string} = req.body
+    const {cod, id}: {cod: string, id: number} = req.body
     try{
-      await FeriadoService.deletar(cod, Number(id));
+      await FeriadoService.deletar(cod, id);
       res.status(204).send({message:"deleted"});
     } catch(e){
       console.error(e);
@@ -56,32 +58,4 @@ export default class FeriadoController {
     }
   }
 
-  /******************************************************************************************************************************************************************/
-
-  public static async cadastrarMovel(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, feriado}: {estado: string, municipio?: string, feriado: string} = req.body;
-    try{
-      const validCod = await validateAll(estado, municipio);
-      const date = feriadoMovel(feriado);
-      const result = await FeriadoService.cadastrarMovel(validCod, feriado, date);
-      res.status(200).send(result);
-    } catch(e){
-      console.error(e);
-      res.status(404).send("An error occured");
-    }
-  }
-
-  public static async deletarMovel(req: Request, res:Response): Promise<void> {
-    const {estado, municipio, feriado}: {estado: string, municipio?: string, feriado: string} = req.body;
-    try{
-      const validCod = await validateAll(estado, municipio);
-      const date = feriadoMovel(feriado);
-      await FeriadoService.deletarMovel(validCod, date);
-      res.status(204).send({message:"deleted"});
-    }
-    catch(e){
-      console.error(e);
-      res.status(404).send("An error occured");
-    }
-  }
 }

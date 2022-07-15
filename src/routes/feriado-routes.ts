@@ -15,11 +15,4 @@ router.route("/feriados/cadastrar")
 router.route("/feriados/deletar")
   .post(verifyCode, FeriadoController.deletar);
 
-/***********************************************************/
-
-router.route("/feriados/cadastrar-movel")
-  .post(middParam, FeriadoController.cadastrarMovel);
-
-router.route("/feriados/deletar-movel")
-  .post(middParam, FeriadoController.deletarMovel);
 export default router;
