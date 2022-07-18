@@ -4,8 +4,7 @@
   "description": "desenvolver uma API que permita consultar e cadastrar feriados estaduais e municipais.",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "test": "ts-node-dev --respawn --transpile-only ./src/util/feriados/feriadoMovel.ts"
+    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts"
   },
   "keywords": [],
   "author": "",
